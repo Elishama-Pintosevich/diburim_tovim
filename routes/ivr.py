@@ -13,7 +13,6 @@ blp = Blueprint("ivr", __name__, description="api of ivr")
 
 @blp.route("/ivr")
 class Ivr(MethodView):
-    @blp.response(200)
     def post(self):
         resp = VoiceResponse()
 
