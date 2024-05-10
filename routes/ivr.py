@@ -17,7 +17,7 @@ class Ivr(MethodView):
         resp = VoiceResponse()
 
         # Read a message aloud to the caller
-        resp.say("Thank you for calling! Have a great day.", voice='Polly.Amy')
+        resp.say("Thank you for calling! you redirect to Elishama Pintosevich.", voice='Polly.Amy')
         resp.dial('972534905961')
         resp.say("goodbye", voice='Polly.Amy')
         return str(resp)
