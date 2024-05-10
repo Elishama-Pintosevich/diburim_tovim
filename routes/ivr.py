@@ -14,13 +14,14 @@ blp = Blueprint("ivr", __name__, description="api of ivr")
 @blp.route("/ivr")
 class Ivr(MethodView):
     @blp.response(200)
-    def post(self, data):
+    def post(self):
         resp = VoiceResponse()
 
         # Read a message aloud to the caller
         resp.say("Thank you for calling! Have a great day.", voice='Polly.Amy')
 
         return str(resp)
+        
 
 
 
