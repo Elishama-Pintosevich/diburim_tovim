@@ -7,3 +7,4 @@ flask-migrate
 psycopg2-binary
 twilio    
 flask-cors
+gunicorn
