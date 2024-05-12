@@ -13,7 +13,7 @@ blp = Blueprint("ivr", __name__, description="api of ivr")
 
 @blp.route("/ivr")
 class Ivr(MethodView):
-    def post():
+    def post(self):
         resp = VoiceResponse()
         # Start our <Gather> verb
         gather = Gather(num_digits=1, action='/ivrGather')
@@ -33,7 +33,7 @@ class Ivr(MethodView):
         
 @blp.route("/ivrGather")
 class IvrGather(MethodView):
-    def post():
+    def post(self):
         resp = VoiceResponse()
 
         if 'Digits' in request.values:
