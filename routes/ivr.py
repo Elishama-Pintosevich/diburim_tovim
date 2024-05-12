@@ -16,10 +16,10 @@ class Ivr(MethodView):
     def post():
         resp = VoiceResponse()
         # Start our <Gather> verb
-        gather = Gather(num_digits=1, action='/gather')
+        gather = Gather(num_digits=1, action='/ivrGather')
         gather.say('For sales, press 1. For support, press 2.')
         resp.append(gather)
-        resp.redirect('/ivrVoice')
+        resp.redirect('/ivr')
 
         return str(resp)
 # def post(self):
