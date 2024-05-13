@@ -85,7 +85,7 @@ class Ivr2(MethodView):
     def post(self):
         resp = VoiceResponse()
         if 'Digits' in request.values:
-            choice = request.values['Digits'] - 1
+            choice = int(request.values['Digits']) - 1
             gather = Gather(num_digits=1, action=f'/ivr3?id={choice}')
             list_1 = [play_and_gather(resp=resp, gather=gather, play='You selected tophia. For check aviable, press 1. For Assistent press 2.'), play_and_gather(resp=resp, gather=gather, play='You selected fantasy. For check aviable, press 1. For Assistent press 2.')]
             list_1[choice]()
