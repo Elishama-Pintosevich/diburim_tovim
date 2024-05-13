@@ -102,7 +102,7 @@ class Ivr3(MethodView):
         resp = VoiceResponse()
         id = request.args.get('id')
         if 'Digits' in request.values:
-            choice = request.values['Digits'] - 1
+            choice = int(request.values['Digits']) - 1
             gather = Gather(num_digits=1, action=f'/ivr4?id={id}&id2={choice}')
             list_2 = [[play_and_gather(resp=resp, gather=gather, play='You selected check aviable tophia. your date aviable. For Assistent press 1. For return to main menu press 2.'),
             redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye')],
@@ -126,7 +126,7 @@ class Ivr4(MethodView):
             id = request.args.get('id')
             id2 = request.args.get('id2')
 
-            choice = request.values['Digits'] - 1
+            choice = int(request.values['Digits']) - 1
             list_3[id][id2][choice]()
 
         resp.redirect('/ivr')
