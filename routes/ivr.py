@@ -100,7 +100,7 @@ http://localhost:5000/ivr3?id=0
 class Ivr3(MethodView):
     def post(self):
         resp = VoiceResponse()
-        id = request.args.get('id')
+        id = int(request.args.get('id'))
         if 'Digits' in request.values:
             choice = int(request.values['Digits']) - 1
             gather = Gather(num_digits=1, action=f'/ivr4?id={id}&id2={choice}')
@@ -123,8 +123,8 @@ class Ivr4(MethodView):
         list_3 = [[[redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye'),return_to_main(resp=resp)],[]],[[redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye'),return_to_main(resp=resp)],[]]]
 
         if 'Digits' in request.values:
-            id = request.args.get('id')
-            id2 = request.args.get('id2')
+            id = int(request.args.get('id'))
+            id2 = int(request.args.get('id2'))
 
             choice = int(request.values['Digits']) - 1
             list_3[id][id2][choice]()
