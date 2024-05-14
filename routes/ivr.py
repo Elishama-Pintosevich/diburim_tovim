@@ -84,10 +84,12 @@ class Ivr(MethodView):
 class Ivr2(MethodView):
     def post(self):
         resp = VoiceResponse()
+        choice = int((request.values.get('Digits') or request.args.get('id') or 0)) - 1
+        gather = Gather(num_digits=1, action=f'/ivr3?id={choice}')
+        list_1 = [play_and_gather(resp=resp, gather=gather, play='You selected tophia. For check aviable, press 1. For Assistent press 2.'), play_and_gather(resp=resp, gather=gather, play='You selected fantasy. For check aviable, press 1. For Assistent press 2.')]
         if 'Digits' in request.values:
-            choice = int(request.values['Digits']) - 1
-            gather = Gather(num_digits=1, action=f'/ivr3?id={choice}')
-            list_1 = [play_and_gather(resp=resp, gather=gather, play='You selected tophia. For check aviable, press 1. For Assistent press 2.'), play_and_gather(resp=resp, gather=gather, play='You selected fantasy. For check aviable, press 1. For Assistent press 2.')]
+            list_1[choice]()
+        elif 'id' in request.args:
             list_1[choice]()
 
         resp.redirect('/ivr')
@@ -110,7 +112,7 @@ class Ivr3(MethodView):
             redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye')]]
             list_2[id][choice]()
 
-        resp.redirect('/ivr')
+        resp.redirect(f'/ivr2?id={id}')
         return str(resp)   
 """
 http://localhost:5000/ivr4?id=0&id2=0
