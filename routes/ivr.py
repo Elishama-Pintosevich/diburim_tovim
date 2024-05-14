@@ -112,7 +112,7 @@ class Ivr3(MethodView):
             redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye')]]
             list_2[id][choice]()
 
-        resp.redirect(f'/ivr2?id={id}')
+        resp.redirect(f'/ivr2?id={id+1}')
         return str(resp)   
 """
 http://localhost:5000/ivr4?id=0&id2=0
