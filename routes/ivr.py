@@ -59,7 +59,12 @@ class Ivr2(MethodView):
         gather = Gather(num_digits=1, action=f'/ivr3?id={choice}')
         list_1 = [play_and_gather(resp=resp, gather=gather, play='You selected tophia. For check aviable, press 1. For Assistent press 2.'), play_and_gather(resp=resp, gather=gather, play='You selected fantasy. For check aviable, press 1. For Assistent press 2.')]
         if 'Digits' in request.values:
-            list_1[choice]()
+            if not (int(request.values.get('Digits')) > len(list_1) or int(request.values.get('Digits')) == 0):
+                list_1[choice]()
+            else:
+                resp.say('wrong number')
+                resp.redirect('/ivr') 
+                return str(resp)   
         elif 'id' in request.args:
             list_1[choice]()
 
@@ -82,7 +87,12 @@ class Ivr3(MethodView):
         redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye')]]
 
         if 'Digits' in request.values:
-            list_2[id][choice]()
+            if not (int(request.values.get('Digits')) > len(list_2[id]) or int(request.values.get('Digits')) == 0):
+                list_2[id][choice]()
+            else:
+                resp.say('wrong number')
+                resp.redirect(f'/ivr2?id={id+1}') 
+                return str(resp) 
         elif 'choise_id' in request.args:
             list_2[id][choice]()
 
@@ -98,14 +108,18 @@ class Ivr4(MethodView):
         resp = VoiceResponse()
         # gather = Gather(num_digits=1, action='/ivr3')
         list_3 = [[[redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye'),return_to_main(resp=resp)],[]],[[redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye'),return_to_main(resp=resp)],[]]]
+        id = int(request.args.get('id'))
+        id2 = int(request.args.get('id2'))
+        choice = int(request.values['Digits']) - 1
 
         if 'Digits' in request.values:
-            id = int(request.args.get('id'))
-            id2 = int(request.args.get('id2'))
-
-            choice = int(request.values['Digits']) - 1
-            list_3[id][id2][choice]()
-
+            if not (int(request.values.get('Digits')) > len(list_3[id][id2]) or int(request.values.get('Digits')) == 0):
+                list_3[id][id2][choice]()
+            else:
+                resp.say('wrong number')
+                resp.redirect(f'/ivr3?id={id}&choise_id={id2+1}') 
+                return str(resp) 
+            
         resp.redirect('/ivr')
         return str(resp)   
         
