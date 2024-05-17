@@ -33,8 +33,8 @@ def send_mail(mail_data):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
     </head>
-    <body>
-        <div dir="rtl" style="background-color: rgb(191 219 254); color: black; padding: 30px 30px 800px 30px;">
+    <body style="background-color: rgb(191 219 254);">
+        <div dir="rtl" style="color: black; padding: 30px 30px 30px 30px;">
             <div style="box-shadow: 1px 1px px black; border-radius: 20px;">
                 <div style=" padding: 18px; background-color: rgb(30 64 175); color: black; border-radius: 20px 20px 0px 0px;">
                     <div style="font-family: sans-serif; font-size: 24px; font-weight: bold; color: white; text-decoration: none;">דיבורים טובים</div>
