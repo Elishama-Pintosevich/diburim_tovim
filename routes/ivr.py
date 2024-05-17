@@ -51,7 +51,7 @@ class Ivr(MethodView):
         calls = client.calls.list(to='97223764951',limit=2)
 
         if not 'retry' in request.args:
-            send_mail({"subject":"לקוח חדש", "message":calls[0].from_formatted, "email":"pintosevich2000@gmail.com"})
+            send_mail({"subject":"לקוח חדש התעניין במוצר", "message":calls[0].from_formatted, "email":"pintosevich2000@gmail.com"})
 
         resp = VoiceResponse()
         gather = Gather(num_digits=1, action='/ivr2')

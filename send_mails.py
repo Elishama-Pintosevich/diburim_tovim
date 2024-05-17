@@ -34,13 +34,13 @@ def send_mail(mail_data):
         <title>Document</title>
     </head>
     <body>
-        <div dir="rtl" style="background-color: #EEF2FF; color: black; border-radius: 20px 0px 20px 0px; ">
-            <div style=" padding: 10px; background-color: #A5B4FB; color: black; border-radius: 20px 0px 0px 0px;">
-                <a href="http://localhost:5173/" style="font-size: large; font-weight: bold; color: black; text-decoration: none;">דיבורים טובים</a>
+        <div dir="rtl" style="background-color: #EEF2FF; color: black; ">
+            <div style=" padding: 10px; background-color: #A5B4FB; color: black; ">
+                <div style="font-size: large; font-weight: bold; color: black; text-decoration: none;">דיבורים טובים</div>
             </div>
             <div style="padding: 20px;">
                 <p>{subject}</p>
-                <p>{message}</p>
+                <a style="font-weight: bold; color: black; text-decoration: none;" href="tel:{message}">{message}</a>
             </div>
         </div>
     </body>
