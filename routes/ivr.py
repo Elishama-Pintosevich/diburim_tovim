@@ -4,6 +4,8 @@ from flask_smorest import Blueprint
 import os
 from dotenv import load_dotenv
 from twilio.twiml.voice_response import VoiceResponse, Gather
+from twilio.rest import Client
+from send_mails import send_mail
 
 
 # from schemas import MailSend
@@ -19,7 +21,7 @@ def redirect_to_asistent(resp, number, start_play="", end_play=""):
 def return_to_main(resp, play=""):
     def inner():
         resp.say(play)
-        resp.redirect('/ivr')
+        resp.redirect('/ivr?retry=yes')
         return str(resp)
     return inner
 
@@ -43,11 +45,19 @@ blp = Blueprint("ivr", __name__, description="api of ivr")
 @blp.route("/ivr")
 class Ivr(MethodView):
     def post(self):
+        account_sid = os.environ['ACCOUNT_SID']
+        auth_token = os.environ['TOKEN_SID']
+        client = Client(account_sid, auth_token)
+        calls = client.calls.list(to='97223764951',limit=2)
+
+        if not 'retry' in request.args:
+            send_mail({"subject":"לקוח חדש", "message":calls[0].from_formatted, "email":"pintosevich2000@gmail.com"})
+
         resp = VoiceResponse()
         gather = Gather(num_digits=1, action='/ivr2')
         start_func = play_and_gather(resp=resp, gather=gather, play='For tophia, press 1. For fantasy, press 2.')
         start_func()
-        resp.redirect('/ivr')
+        resp.redirect('/ivr?retry=yes')
         return str(resp)
 
         
@@ -63,7 +73,7 @@ class Ivr2(MethodView):
                 list_1[choice]()
             else:
                 resp.say('wrong number')
-                resp.redirect('/ivr') 
+                resp.redirect('/ivr?retry=yes') 
                 return str(resp)   
         elif 'id' in request.args:
             list_1[choice]()
@@ -120,6 +130,6 @@ class Ivr4(MethodView):
                 resp.redirect(f'/ivr3?id={id}&choise_id={id2+1}') 
                 return str(resp) 
             
-        resp.redirect('/ivr')
+        resp.redirect('/ivr?retry=yes')
         return str(resp)   
         
