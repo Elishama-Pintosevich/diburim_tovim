@@ -22,7 +22,7 @@ class ActionsBaseSchema(Schema):
 
 class CalendarBaseSchema(Schema):
     id = fields.Int(dump_only=True)
-    taken_date = fields.Date().required()
+    taken_date = fields.Date()
 
 class BpnSchema(BpnBaseSchema):
     user_id = fields.Int(required=True, load_only = True)
@@ -31,7 +31,7 @@ class BpnSchema(BpnBaseSchema):
     taken_dates = fields.List(fields.Nested(CalendarBaseSchema()), dump_only=True) 
 
 class UsersSchema(UsersBaseSchema):
-    bpn = fields.List(fields.Nested(BpnSchema()), dump_only=True) 
+    bpn = fields.List(fields.Nested(BpnBaseSchema()), dump_only=True) 
 
 class ActionsSchema(ActionsBaseSchema):
     bpn_id = fields.Int(required=True, load_only = True)
