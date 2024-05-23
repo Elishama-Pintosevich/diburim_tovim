@@ -8,9 +8,9 @@ class UserModel(db.Model):
     name = db.Column(db.String(80), nullable = False)
     phone_number = db.Column(db.Integer, unique = True, nullable = False)
     email = db.Column(db.String(80), nullable = True)
-    password = db.Column(db.String(80), nullable = False)
-    account = db.Column(db.String(80), nullable = False)
-    token = db.Column(db.String(80), nullable = False)
+    password = db.Column(db.String(200), nullable = False)
+    account = db.Column(db.String(200), nullable = False)
+    token = db.Column(db.String(200), nullable = False)
     bpn = db.relationship("BpnModel", back_populates="user", lazy = "dynamic", cascade="all, delete")
 
     time_created = db.Column(db.DateTime(timezone = True), server_default = func.now())
