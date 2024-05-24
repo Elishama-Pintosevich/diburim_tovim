@@ -15,14 +15,15 @@ class BpnBaseSchema(Schema):
 
 class ActionsBaseSchema(Schema):
     id = fields.Int(dump_only=True)
-    stage = fields.Int(dump_only=True)
-    kind = fields.Int(dump_only=True)
-    key_number = fields.Int(dump_only=True)
+    stage = fields.Int(required=True)
+    kind = fields.Int(required=True)
+    key_number = fields.Int(required=True)
     paramaters = fields.Str(required=True)
 
 class CalendarBaseSchema(Schema):
     id = fields.Int(dump_only=True)
     taken_date = fields.Date()
+    room_number = fields.Int(required=True)
 
 class BpnSchema(BpnBaseSchema):
     user_id = fields.Int(required=True, load_only = True)
@@ -40,5 +41,6 @@ class ActionsSchema(ActionsBaseSchema):
 class CalendarSchema(CalendarBaseSchema):
     bpn_id = fields.Int(required=True, load_only = True)
     bpn = fields.Nested(BpnBaseSchema(), dump_only=True)
+    
 
 
