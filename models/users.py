@@ -6,7 +6,7 @@ class UserModel(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(80), nullable = False)
-    phone_number = db.Column(db.Integer, unique = True, nullable = False)
+    phone_number = db.Column(db.String(20), unique = True, nullable = False)
     email = db.Column(db.String(80), nullable = True)
     password = db.Column(db.String(200), nullable = False)
     account = db.Column(db.String(200), nullable = False)

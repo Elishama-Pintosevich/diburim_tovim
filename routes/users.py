@@ -11,7 +11,7 @@ blp = Blueprint("users", __name__, description = "users controller")
 
 
 @blp.route("/users")   
-class ListStores(MethodView):
+class Users(MethodView):
     @blp.response(200, UsersSchema(many=True))
     def get(self):
         return UserModel.query.all()
