@@ -9,7 +9,6 @@ from schemas import ActionsSchema
 
 blp = Blueprint("actions", __name__, description = "actions controller")
 
-
 @blp.route("/actions")   
 class Actions(MethodView):
     @blp.response(200, ActionsSchema(many=True))
