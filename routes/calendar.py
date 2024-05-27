@@ -30,12 +30,9 @@ class User(MethodView):
     def put(self, item_data, item_id):
         item = CalendarModel.query.get_or_404(item_id)
 
-        item.name = item_data['name']
-        item.email = item_data['email']
-        item.phone_number = item_data['phone_number']
-        item.password = item_data['password']
-        item.account = item_data['account']
-        item.token = item_data['token']
+        item.taken_date = item_data['taken_date']
+        item.room_number = item_data['room_number']
+        
 
         db.session.add(item)
         db.session.commit()

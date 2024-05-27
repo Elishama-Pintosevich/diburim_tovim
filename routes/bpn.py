@@ -5,11 +5,38 @@ from db import db
 from models import BpnModel
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 # from db import stores
-from schemas import BpnSchema
+from schemas import BpnSchema, BpnBaseSchema
 
 blp = Blueprint("bpn", __name__, description = "bpn controller")
 
+@blp.route("/bpn/<int:item_id>")
+class User(MethodView):
+    @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
+    @blp.response(200, BpnSchema)
+    def get(self, item_id):
+        item = BpnModel.query.get_or_404(item_id)
+        return item
+    
+    @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
+    def delete(self, item_id):
+        item = BpnModel.query.get_or_404(item_id)
+        db.session.delete(item)
+        db.session.commit()
+        return {"msg":"user deleted"}
+    
+    @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
+    @blp.arguments(BpnBaseSchema)
+    @blp.response(200, BpnSchema)
+    def put(self, item_data, item_id):
+        item = BpnModel.query.get_or_404(item_id)
 
+        item.phone_number = item_data['phone_number']
+        
+        db.session.add(item)
+        db.session.commit()
+
+        return item
+    
 @blp.route("/bpn")   
 class Bpn(MethodView):
     @blp.response(200, BpnSchema(many=True))
