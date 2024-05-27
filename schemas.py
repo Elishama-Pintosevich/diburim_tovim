@@ -33,6 +33,10 @@ class BpnSchema(BpnBaseSchema):
 
 class UsersSchema(UsersBaseSchema):
     bpn = fields.List(fields.Nested(BpnBaseSchema()), dump_only=True) 
+    
+class ItemIdSchema(Schema):
+    item_id = fields.String(required=True, description="The ID of the item")
+
 
 class ActionsSchema(ActionsBaseSchema):
     bpn_id = fields.Int(required=True, load_only = True)
