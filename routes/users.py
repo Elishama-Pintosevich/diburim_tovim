@@ -10,8 +10,16 @@ from schemas import UsersSchema, UsersBaseSchema, ItemIdSchema
 blp = Blueprint("users", __name__, description = "users controller")
 
 
+@blp.route("/userByPhoneNumber/<string:pn>")
+class BpnByNumber(MethodView):
+    @blp.doc(parameters=[{'name': 'pn','in': 'path','description': 'The business phone number of the user','required': True,'schema': {'type': 'string'}}])
+    @blp.response(200, UsersSchema)
+    def get(self, pn):
+        item = UserModel.query.filter_by(phone_number = pn).first_or_404()
+        return item
+    
 @blp.route("/users/<int:item_id>")
-class User(MethodView):
+class UserItem(MethodView):
     @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
     @blp.response(200, UsersSchema)
     def get(self, item_id):

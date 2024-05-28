@@ -15,9 +15,8 @@ class BpnBaseSchema(Schema):
 
 class ActionsBaseSchema(Schema):
     id = fields.Int(dump_only=True)
-    stage = fields.Int(required=True)
+    path = fields.Str(required=True)
     kind = fields.Int(required=True)
-    key_number = fields.Int(required=True)
     paramaters = fields.Str(required=True)
 
 class CalendarBaseSchema(Schema):
@@ -33,7 +32,7 @@ class BpnSchema(BpnBaseSchema):
 
 class UsersSchema(UsersBaseSchema):
     bpn = fields.List(fields.Nested(BpnBaseSchema()), dump_only=True) 
-    
+
 class ItemIdSchema(Schema):
     item_id = fields.String(required=True, description="The ID of the item")
 

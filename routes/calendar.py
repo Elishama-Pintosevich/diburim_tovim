@@ -10,7 +10,7 @@ from schemas import CalendarSchema, CalendarBaseSchema
 blp = Blueprint("calendar", __name__, description = "calendar controller")
 
 @blp.route("/calendar/<int:item_id>")
-class User(MethodView):
+class CalendarItem(MethodView):
     @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
     @blp.response(200, CalendarSchema)
     def get(self, item_id):

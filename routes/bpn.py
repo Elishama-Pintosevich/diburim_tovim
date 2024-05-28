@@ -9,13 +9,21 @@ from schemas import BpnSchema, BpnBaseSchema
 
 blp = Blueprint("bpn", __name__, description = "bpn controller")
 
+@blp.route("/bpnByPhoneNumber/<string:bpn>")
+class BpnByNumber(MethodView):
+    @blp.doc(parameters=[{'name': 'bpn','in': 'path','description': 'The business phone number of the user','required': True,'schema': {'type': 'string'}}])
+    @blp.response(200, BpnSchema)
+    def get(self, bpn):
+        item = BpnModel.query.filter_by(phone_number = bpn).first_or_404()
+        return item
+    
 @blp.route("/bpn/<int:item_id>")
-class User(MethodView):
+class BpnItem(MethodView):   
     @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
     @blp.response(200, BpnSchema)
     def get(self, item_id):
         item = BpnModel.query.get_or_404(item_id)
-        return item
+        return item 
     
     @blp.doc(parameters=[{'name': 'item_id','in': 'path','description': 'The ID of the user','required': True,'schema': {'type': 'integer'}}])
     def delete(self, item_id):
