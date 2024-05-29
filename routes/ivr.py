@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 from twilio.twiml.voice_response import VoiceResponse, Gather
 from twilio.rest import Client
-from send_mails import send_mail
+from services import send_mail
 
 
 # from schemas import MailSend

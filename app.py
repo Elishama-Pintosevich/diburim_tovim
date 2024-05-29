@@ -1,9 +1,12 @@
 from flask import Flask , request
 from flask_smorest import Api
-from routes.ivr import blp as IvrBlueprint
+from routes import IvrBlueprint, UsersBlueprint, BpnBlueprint, CalendarBlueprint, ActionsBlueprint
 from flask_cors import CORS
 import os
 from twilio.rest import Client
+from flask_migrate import Migrate
+from db import db
+
 
 def create_app():
     app = Flask(__name__)
@@ -21,12 +24,20 @@ def create_app():
     app.config["OPENAPI_URL_PREFIX"] = "/"
     app.config["OPENAPI_SWAGGER_UI_PATH"] = "/"
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.0/"
-    
 
-    
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres@localhost:5433/postgres"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+    db.init_app(app)
+    migrate = Migrate(app, db)
+    
     api = Api(app)
     api.register_blueprint(IvrBlueprint)
+    api.register_blueprint(UsersBlueprint)
+    api.register_blueprint(BpnBlueprint)
+    api.register_blueprint(ActionsBlueprint)
+    api.register_blueprint(CalendarBlueprint)
+
 
     return app
 
