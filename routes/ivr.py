@@ -5,84 +5,76 @@ import os
 from dotenv import load_dotenv
 from twilio.twiml.voice_response import VoiceResponse, Gather
 from twilio.rest import Client
-from services import send_mail
-
-
-# from schemas import MailSend
-
-def redirect_to_asistent(resp, number, start_play="", end_play=""):
-    def inner():
-        resp.say(start_play)
-        resp.dial(number)
-        resp.say(end_play)
-        return str(resp)
-    return inner
-
-def return_to_main(resp, play=""):
-    def inner():
-        resp.say(play)
-        resp.redirect('/ivr?retry=yes')
-        return str(resp)
-    return inner
-
-def play_and_gather(resp, gather, play=""):
-    def inner():
-        gather.say(play)
-        resp.append(gather)
-        return str(resp)
-    return inner
-
-def play(resp, play=""):
-    def inner():
-        resp.say(play)
-        return str(resp)
-    return inner    
+from services import send_mail, call_by_path_action_type
+from models import BpnModel
 
 
 
+"""
+http://localhost:5000/ivr?phone_number=023764951
+"""
 
+"""
+
+                                       ! change paramaters - parameters in actions model important !
+
+"""
 blp = Blueprint("ivr", __name__, description="api of ivr")
 @blp.route("/ivr")
 class Ivr(MethodView):
+    @blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}}])
     def post(self):
-        account_sid = os.environ['ACCOUNT_SID']
-        auth_token = os.environ['TOKEN_SID']
-        client = Client(account_sid, auth_token)
-        calls = client.calls.list(to='97223764951',limit=2)
-
-        if not 'retry' in request.args:
-            send_mail({"subject":"לקוח חדש התעניין במוצר", "message":calls[0].from_formatted, "email":"pintosevich2000@gmail.com"})
 
         resp = VoiceResponse()
-        gather = Gather(num_digits=1, action='/ivr2')
-        start_func = play_and_gather(resp=resp, gather=gather, play='For tophia, press 1. For fantasy, press 2.')
-        start_func()
-        resp.redirect('/ivr?retry=yes')
+        gather = Gather(num_digits=1, action=f'/ivr2?phone_number={request.args.get('phone_number')}')
+        item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
+
+        account_sid = item.user.account
+        auth_token = item.user.token
+        client = Client(account_sid, auth_token)
+        calls = client.calls.list(to=request.args.get('phone_number'),limit=2)
+
+        if not 'retry' in request.args:
+            # send_mail({"subject":"לקוח חדש התעניין במוצר", "message":calls[0].from_formatted, "email":item.user.email})
+            pass
+            
+
+        call_by_path_action_type('start', item.actions[:], resp, gather, request.args.get('phone_number'))
+
+        resp.redirect(f'/ivr?retry=yes&phone_number={request.args.get('phone_number')}')
         return str(resp)
 
-        
+"""
+http://localhost:5000/ivr2?phone_number=023764951
+"""
 @blp.route("/ivr2")
 class Ivr2(MethodView):
     def post(self):
         resp = VoiceResponse()
         choice = int((request.values.get('Digits') or request.args.get('id') or 0)) - 1
-        gather = Gather(num_digits=1, action=f'/ivr3?id={choice}')
-        list_1 = [play_and_gather(resp=resp, gather=gather, play='You selected tophia. For check aviable, press 1. For Assistent press 2.'), play_and_gather(resp=resp, gather=gather, play='You selected fantasy. For check aviable, press 1. For Assistent press 2.')]
-        if 'Digits' in request.values:
-            if not (int(request.values.get('Digits')) > len(list_1) or int(request.values.get('Digits')) == 0):
-                list_1[choice]()
-            else:
-                resp.say('wrong number')
-                resp.redirect('/ivr?retry=yes') 
-                return str(resp)   
-        elif 'id' in request.args:
-            list_1[choice]()
+        gather = Gather(num_digits=1, action=f'/ivr3?id={choice}&phone_number={request.args.get('phone_number')}')
+        
+        item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
 
-        resp.redirect(f'/ivr2?id={choice+1}')
+        if 'Digits' in request.values:
+           
+            action = call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'))
+          
+            if not action:
+                resp.say('wrong number')
+                resp.redirect(f'/ivr?retry=yes&phone_number={request.args.get('phone_number')}') 
+                return str(resp)   
+            
+        elif 'id' in request.args:
+            
+            call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'))
+
+
+        resp.redirect(f'/ivr2?id={choice+1}&phone_number={request.args.get('phone_number')}')
 
         return str(resp)   
 """
-http://localhost:5000/ivr3?id=0
+http://localhost:5000/ivr3?id=0&phone_number=023764951
 """
 @blp.route("/ivr3")
 class Ivr3(MethodView):
@@ -90,46 +82,49 @@ class Ivr3(MethodView):
         resp = VoiceResponse()
         id = int(request.args.get('id'))
         choice = int((request.values.get('Digits') or request.args.get('choise_id') or 0)) - 1
-        gather = Gather(num_digits=1, action=f'/ivr4?id={id}&id2={choice}')
-        list_2 = [[play_and_gather(resp=resp, gather=gather, play='You selected check aviable tophia. your date aviable. For Assistent press 1. For return to main menu press 2.'),
-        redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye')],
-        [play_and_gather(resp=resp, gather=gather, play='You selected check aviable fantasy. your date aviable. For Assistent press 1. For return to main menu press 2.'),
-        redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye')]]
+        gather = Gather(num_digits=1, action=f'/ivr4?id={id}&id2={choice}&phone_number={request.args.get('phone_number')}')
+        
+        item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
+
 
         if 'Digits' in request.values:
-            if not (int(request.values.get('Digits')) > len(list_2[id]) or int(request.values.get('Digits')) == 0):
-                list_2[id][choice]()
-            else:
+            action = call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
+            
+            if not action:
                 resp.say('wrong number')
-                resp.redirect(f'/ivr2?id={id+1}') 
+                resp.redirect(f'/ivr2?id={id+1}&phone_number={request.args.get('phone_number')}') 
                 return str(resp) 
+            
         elif 'choise_id' in request.args:
-            list_2[id][choice]()
+            call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
 
-        resp.redirect(f'/ivr3?id={id}&choise_id={choice+1}')
+
+        resp.redirect(f'/ivr3?id={id}&choise_id={choice+1}&phone_number={request.args.get('phone_number')}')
         
         return str(resp)   
 """
-http://localhost:5000/ivr4?id=0&id2=0
+http://localhost:5000/ivr4?id=0&id2=0&phone_number=023764951
 """
 @blp.route("/ivr4")
 class Ivr4(MethodView):
     def post(self):
         resp = VoiceResponse()
-        # gather = Gather(num_digits=1, action='/ivr3')
-        list_3 = [[[redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye'),return_to_main(resp=resp)],[]],[[redirect_to_asistent(resp=resp, number='972534905961', start_play='You need support. Elishama will Help you!', end_play='goodbye'),return_to_main(resp=resp)],[]]]
+        gather = Gather(num_digits=1, action='/ivr3')
+        
+        item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
+
         id = int(request.args.get('id'))
         id2 = int(request.args.get('id2'))
         choice = int(request.values['Digits']) - 1
 
         if 'Digits' in request.values:
-            if not (int(request.values.get('Digits')) > len(list_3[id][id2]) or int(request.values.get('Digits')) == 0):
-                list_3[id][id2][choice]()
-            else:
+            
+            action = call_by_path_action_type(f"{id}.{id2}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
+           
+            if not action:
                 resp.say('wrong number')
-                resp.redirect(f'/ivr3?id={id}&choise_id={id2+1}') 
+                resp.redirect(f'/ivr3?id={id}&choise_id={id2+1}&phone_number={request.args.get('phone_number')}') 
                 return str(resp) 
             
-        resp.redirect('/ivr?retry=yes')
+        resp.redirect(f'/ivr?retry=yes&phone_number={request.args.get('phone_number')}')
         return str(resp)   
-        
