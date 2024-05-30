@@ -35,6 +35,7 @@ class Ivr(MethodView):
         calls = client.calls.list(to=request.args.get('phone_number'),limit=2)
         print(f"{account_sid} {auth_token}")
         print(calls)
+        print(request.values)
         if not 'retry' in request.args:
             # send_mail({"subject":"לקוח חדש התעניין במוצר", "message":calls[0].from_formatted, "email":item.user.email})
             pass
