@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 99b672c7b22d
+Revision ID: ded54fc3c817
 Revises: 
-Create Date: 2024-05-24 14:14:25.175376
+Create Date: 2024-05-30 20:30:18.731990
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '99b672c7b22d'
+revision = 'ded54fc3c817'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,7 +21,7 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=80), nullable=False),
-    sa.Column('phone_number', sa.Integer(), nullable=False),
+    sa.Column('phone_number', sa.String(length=20), nullable=False),
     sa.Column('email', sa.String(length=80), nullable=True),
     sa.Column('password', sa.String(length=200), nullable=False),
     sa.Column('account', sa.String(length=200), nullable=False),
@@ -44,10 +44,9 @@ def upgrade():
     op.create_table('actions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('bpn_id', sa.Integer(), nullable=False),
-    sa.Column('stage', sa.Integer(), nullable=False),
     sa.Column('kind', sa.Integer(), nullable=False),
-    sa.Column('key_number', sa.Integer(), nullable=False),
-    sa.Column('paramaters', sa.String(length=1000), nullable=True),
+    sa.Column('path', sa.String(length=10), nullable=False),
+    sa.Column('paramaters', sa.String(length=1000), nullable=False),
     sa.Column('time_created', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('time_updated', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['bpn_id'], ['bpn.id'], ),
