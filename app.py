@@ -26,7 +26,7 @@ def create_app():
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.0/"
     #"postgresql://postgres@localhost:5433/postgres"
     # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres@localhost:5433/diburim_tovim"
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ['DATABASE_URI']
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ['DATABASE_URL']
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
