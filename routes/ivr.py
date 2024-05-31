@@ -50,7 +50,7 @@ http://localhost:5000/ivr2?phone_number=023764951
 class Ivr2(MethodView):
     def post(self):
         resp = VoiceResponse()
-        choice = int((request.values.get('Digits') or request.args.get('id') or 0)) - 1
+        choice = int((request.values.get('Digits') or request.args.get('id') or 0))
         gather = Gather(num_digits=1, action=f'/ivr3?id={choice}&phone_number={request.args.get('phone_number')}')
         
         item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
@@ -69,7 +69,7 @@ class Ivr2(MethodView):
             call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'))
 
 
-        resp.redirect(f'/ivr2?id={choice+1}&phone_number={request.args.get('phone_number')}')
+        resp.redirect(f'/ivr2?id={choice}&phone_number={request.args.get('phone_number')}')
 
         return str(resp)   
 """
@@ -80,7 +80,7 @@ class Ivr3(MethodView):
     def post(self):
         resp = VoiceResponse()
         id = int(request.args.get('id'))
-        choice = int((request.values.get('Digits') or request.args.get('choise_id') or 0)) - 1
+        choice = int((request.values.get('Digits') or request.args.get('choise_id') or 0)) 
         gather = Gather(num_digits=1, action=f'/ivr4?id={id}&id2={choice}&phone_number={request.args.get('phone_number')}')
         
         item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
@@ -91,14 +91,14 @@ class Ivr3(MethodView):
             
             if not action:
                 resp.say('wrong number')
-                resp.redirect(f'/ivr2?id={id+1}&phone_number={request.args.get('phone_number')}') 
+                resp.redirect(f'/ivr2?id={id}&phone_number={request.args.get('phone_number')}') 
                 return str(resp) 
             
         elif 'choise_id' in request.args:
             call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
 
 
-        resp.redirect(f'/ivr3?id={id}&choise_id={choice+1}&phone_number={request.args.get('phone_number')}')
+        resp.redirect(f'/ivr3?id={id}&choise_id={choice}&phone_number={request.args.get('phone_number')}')
         
         return str(resp)   
 """
@@ -114,7 +114,7 @@ class Ivr4(MethodView):
 
         id = int(request.args.get('id'))
         id2 = int(request.args.get('id2'))
-        choice = int(request.values['Digits']) - 1
+        choice = int(request.values['Digits'])
 
         if 'Digits' in request.values:
             
@@ -122,7 +122,7 @@ class Ivr4(MethodView):
            
             if not action:
                 resp.say('wrong number')
-                resp.redirect(f'/ivr3?id={id}&choise_id={id2+1}&phone_number={request.args.get('phone_number')}') 
+                resp.redirect(f'/ivr3?id={id}&choise_id={id2}&phone_number={request.args.get('phone_number')}') 
                 return str(resp) 
             
         resp.redirect(f'/ivr?retry=yes&phone_number={request.args.get('phone_number')}')

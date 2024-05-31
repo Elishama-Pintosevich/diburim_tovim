@@ -35,8 +35,9 @@ def call_by_path_action_type(path, actions, resp, gather, bpn):
     filtered_list = list(filter(lambda d: d.path == path, actions))
     if len(filtered_list) > 0:
         my_dict = json.loads(filtered_list[0].paramaters)
-        return func_list[filtered_list[0].kind](resp = resp, gather = gather, bpn = bpn, **my_dict)
+        func_list[filtered_list[0].kind](resp = resp, gather = gather, bpn = bpn, **my_dict)
+        return True
     else:
-        return None
+        return False
        
     
