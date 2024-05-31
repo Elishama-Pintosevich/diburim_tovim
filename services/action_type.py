@@ -9,6 +9,7 @@ def redirect_to_asistent(**kwargs):
     kwargs.get('resp').say(kwargs.get('start_play'))
     kwargs.get('resp').dial(kwargs.get('number'))
     kwargs.get('resp').say(kwargs.get('end_play'))
+    kwargs.get('resp').hangup()
     
     
 #resp, play=""
@@ -24,7 +25,8 @@ def play_and_gather(**kwargs):
     
 #resp, play=""
 def play(**kwargs):
-    kwargs.get('resp').say(kwargs.get('play'))
+    kwargs.get('resp').say(kwargs.get('play'), loop=3)
+    kwargs.get('resp').hangup()
     
         
 
