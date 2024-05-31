@@ -8,3 +8,4 @@ psycopg2-binary
 twilio    
 flask-cors
 gunicorn
+google-cloud-texttospeech
