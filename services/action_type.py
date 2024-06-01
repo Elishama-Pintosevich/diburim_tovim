@@ -1,4 +1,4 @@
-
+from text_to_speech import get_speech_from_text
 import json
 
 
@@ -6,26 +6,41 @@ import json
 
 #resp, number, start_play="", end_play=""
 def redirect_to_asistent(**kwargs):
-    kwargs.get('resp').say(kwargs.get('start_play'))
+
+    start_play = get_speech_from_text(kwargs.get('start_play'))
+
+    kwargs.get('resp').play(start_play)
     kwargs.get('resp').dial(kwargs.get('number'))
-    kwargs.get('resp').say(kwargs.get('end_play'))
+
+    end_play = get_speech_from_text(kwargs.get('end_play'))
+
+    kwargs.get('resp').play(end_play)
     kwargs.get('resp').hangup()
     
     
 #resp, play=""
 def return_to_main(**kwargs):
-    kwargs.get('resp').say(kwargs.get('play'))
+
+    play = get_speech_from_text(kwargs.get('play'))
+
+    kwargs.get('resp').play(play)
     kwargs.get('resp').redirect(f'/ivr?retry=yes&phone_number={kwargs.get('bpn')}')
     
 #resp, gather, play=""
 def play_and_gather(**kwargs):
-    kwargs.get('gather').say(kwargs.get('play'))
+
+    play = get_speech_from_text(kwargs.get('play'))
+
+    kwargs.get('gather').play(play)
     kwargs.get('resp').append(kwargs.get('gather'))
    
     
 #resp, play=""
 def play(**kwargs):
-    kwargs.get('resp').say(kwargs.get('play'), loop=3)
+
+    play = get_speech_from_text(kwargs.get('play'))
+
+    kwargs.get('resp').play(play, loop=3)
     kwargs.get('resp').hangup()
     
         

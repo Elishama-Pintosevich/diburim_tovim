@@ -1,7 +1,7 @@
 from google.cloud import texttospeech
 
 # Instantiates a client
-def text_to_speech(text):
+def get_speech_from_text(text):
     client = texttospeech.TextToSpeechClient()
 
     # Set the text input to be synthesized
@@ -24,7 +24,7 @@ def text_to_speech(text):
         input=synthesis_input, voice=voice, audio_config=audio_config
     
     )
-    return response
+    return response.audio_content
 
 # The response's audio_content is binary.
 # with open("output.mp3", "wb") as out:

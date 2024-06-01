@@ -6,6 +6,7 @@ import os
 from twilio.rest import Client
 from flask_migrate import Migrate
 from db import db
+from services import update_json_template
 
 
 def create_app():
@@ -39,6 +40,7 @@ def create_app():
     api.register_blueprint(ActionsBlueprint)
     api.register_blueprint(CalendarBlueprint)
 
+    update_json_template()
 
     return app
 
