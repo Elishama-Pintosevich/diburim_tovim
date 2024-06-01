@@ -1,4 +1,4 @@
-from text_to_speech import get_speech_from_text
+from .text_to_speech import get_speech_from_text
 import json
 
 
