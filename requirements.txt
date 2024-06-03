@@ -9,3 +9,4 @@ twilio
 flask-cors
 gunicorn
 google-cloud-texttospeech
+google-cloud-storage
