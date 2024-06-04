@@ -42,7 +42,7 @@ def create_app():
     api.register_blueprint(SoundBlueprint)
     
     update_json_template()
-    credentials_path = 'config/application_default_credentials.json'
+    credentials_path = 'config/adroit-petal-425012-d5-ee5c7cea09b8.json'
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
     return app
