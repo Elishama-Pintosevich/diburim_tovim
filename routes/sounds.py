@@ -30,9 +30,9 @@ class Actions(MethodView):
         user_data['path'] = f'{user_data['bpn']}/{file_name}'
         mp_3 = get_speech_from_text(user_data['content'])
 
-        create_file(mp_3, f"tmp_files/{file_name}")
-        upload_file("sound-storage", f"tmp_files/{file_name}", user_data['path'])
-        delete_file(f"tmp_files/{file_name}")
+        # create_file(mp_3, f"tmp_files/{file_name}")
+        upload_file("sound-storage", mp_3, user_data['path'])
+        # delete_file(f"tmp_files/{file_name}")
 
         store = SoundModel(**user_data)
         try:
