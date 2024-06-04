@@ -13,11 +13,16 @@ def update_json_template():
         json_data = json.load(template_file)
 
     load_dotenv()
+    json_data['type'] = os.environ['CLIENT_ID']
+    json_data['project_id'] = os.environ['PROJECT_ID']
+    json_data['private_key_id'] = os.environ['PRIVATE_KEY_ID']
+    json_data['private_key'] = os.environ['PRIVATE_KEY']
+    json_data['client_email'] = os.environ['CLIENT_EMAIL']
     json_data['client_id'] = os.environ['CLIENT_ID']
-    json_data['client_secret'] = os.environ['CLIENT_SECRET']
-    json_data['quota_project_id'] = os.environ['QUOTA_PROJECT_ID']
-    json_data['refresh_token'] = os.environ['REFRESH_TOKEN']
-    json_data['type'] = os.environ['TYPE']
+    json_data['auth_uri'] = os.environ['AUTH_URI']
+    json_data['token_uri'] = os.environ['TOKEN_URI']
+    json_data['auth_provider_x509_cert_url'] = os.environ['AUTH_PROVIDER']
+    json_data['client_x509_cert_url'] = os.environ['CLIENT_X509']
     json_data['universe_domain'] = os.environ['UNIVERSE_DOMAIN']
     
     

@@ -40,8 +40,10 @@ def create_app():
     api.register_blueprint(ActionsBlueprint)
     api.register_blueprint(CalendarBlueprint)
     api.register_blueprint(SoundBlueprint)
-
+    
     update_json_template()
+    credentials_path = 'config/application_default_credentials.json'
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
     return app
 
