@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 def update_json_template():
     
-    credentials_path = 'config/adroit-petal-425012-d5-ee5c7cea09b8.json'
+    credentials_path = 'config/test.json'
     
     
     
