@@ -42,7 +42,7 @@ def create_app():
     api.register_blueprint(SoundBlueprint)
     
     # update_json_template()
-    
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['PATH']
 
     return app
 
