@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 def get_credentials_from_json_env():
     load_dotenv()
     json_str = os.environ['FILE']
+    print(json_str)
     if not json_str:
         raise EnvironmentError("The GOOGLE_CLOUD_CREDENTIALS_JSON environment variable is not set or is empty")
 
