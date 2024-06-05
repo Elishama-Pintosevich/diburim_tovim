@@ -1,33 +1,42 @@
 from google.cloud import texttospeech
+from google.oauth2 import service_account
+import json
+import os
 
-# Instantiates a client
+
+
+def get_credentials_from_json_env():
+    
+    json_str = os.getenv('FILE')
+    if not json_str:
+        raise EnvironmentError("The GOOGLE_CLOUD_CREDENTIALS_JSON environment variable is not set or is empty")
+
+    service_account_info = json.loads(json_str)
+    
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+    return credentials
+
+
+
 def get_speech_from_text(text):
-    client = texttospeech.TextToSpeechClient()
 
-    # Set the text input to be synthesized
+    credentials = get_credentials_from_json_env()
+
+    client = texttospeech.TextToSpeechClient(credentials=credentials)
+
     synthesis_input = texttospeech.SynthesisInput(text=text)
-
-    # Build the voice request, select the language code ("en-US") and the ssml
-    # voice gender ("neutral")
+  
     voice = texttospeech.VoiceSelectionParams(
         language_code="he-IL",name="he-IL-Standard-C", ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
     )
 
-    # Select the type of audio file you want returned
     audio_config = texttospeech.AudioConfig(
         audio_encoding=texttospeech.AudioEncoding.MP3
     )
 
-    # Perform the text-to-speech request on the text input with the selected
-    # voice parameters and audio file type
     response = client.synthesize_speech(
         input=synthesis_input, voice=voice, audio_config=audio_config
     
     )
     return response.audio_content
 
-# The response's audio_content is binary.
-# with open("output.mp3", "wb") as out:
-#     # Write the response to the output file.
-#     out.write(response.audio_content)
-#     print('Audio content written to file "output.mp3"')

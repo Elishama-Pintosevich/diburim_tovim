@@ -7,6 +7,8 @@ from twilio.rest import Client
 from flask_migrate import Migrate
 from db import db
 from services import update_json_template
+from google.oauth2 import service_account
+import json
 
 
 def create_app():
@@ -41,8 +43,7 @@ def create_app():
     api.register_blueprint(CalendarBlueprint)
     api.register_blueprint(SoundBlueprint)
     
-    # update_json_template()
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['PATH']
+    
 
     return app
 
