@@ -2,12 +2,14 @@ from google.cloud import texttospeech
 from google.oauth2 import service_account
 import json
 import os
+from dotenv import load_dotenv
+
 
 
 
 def get_credentials_from_json_env():
-    
-    json_str = os.getenv('FILE')
+    load_dotenv()
+    json_str = os.environ['FILE']
     if not json_str:
         raise EnvironmentError("The GOOGLE_CLOUD_CREDENTIALS_JSON environment variable is not set or is empty")
 
