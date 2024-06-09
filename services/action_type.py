@@ -41,7 +41,9 @@ def call_by_path_action_type(path, actions, resp, gather, bpn):
     func_list = [redirect_to_asistent, return_to_main, play_and_gather, play]
     filtered_list = list(filter(lambda d: d.path == path, actions))
     if len(filtered_list) > 0:
-        my_dict = {d["type"]: f'https://storage.googleapis.com/sound-storage/{d["path"]}' for d in filtered_list[0].sounds[:]}
+        my_sounds = filtered_list[0].sounds[:]
+        print(my_sounds)
+        my_dict = {d["type"]: f'https://storage.googleapis.com/sound-storage/{d["path"]}' for d in my_sounds}
         my_dict['number'] = filtered_list[0].parameters or None
         func_list[filtered_list[0].kind](resp = resp, gather = gather, bpn = bpn, **my_dict)
         return True
