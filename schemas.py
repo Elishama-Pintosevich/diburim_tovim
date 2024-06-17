@@ -6,8 +6,10 @@ class UsersBaseSchema(Schema):
     email = fields.Email()
     phone_number = fields.Str(required=True) 
     password = fields.Str(required=True) 
-    account = fields.Str(required=True) 
-    token = fields.Str(required=True) 
+    account = fields.Str(required=False) 
+    api_key = fields.Str(required=False)
+    api_secret = fields.Str(required=False)
+    # token = fields.Str(required=True) 
 
 class BpnBaseSchema(Schema):
     id = fields.Int(dump_only=True)

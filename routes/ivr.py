@@ -29,10 +29,10 @@ class Ivr(MethodView):
         gather = Gather(num_digits=1, action=f'/ivr2?phone_number={request.args.get('phone_number')}')
         item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
 
-        account_sid = item.user.account
-        auth_token = item.user.token
-        client = Client(account_sid, auth_token)
-        calls = client.calls.list(to=request.args.get('phone_number'),limit=2)
+        # account_sid = item.user.account
+        # auth_token = item.user.token
+        # client = Client(account_sid, auth_token)
+        # calls = client.calls.list(to=request.args.get('phone_number'),limit=2)
         
         if not 'retry' in request.args:
             send_mail({"subject":"לקוח חדש התעניין במוצר", "message":request.values.get('From'), "email":item.user.email})

@@ -1,6 +1,6 @@
 from flask import Flask , request
 from flask_smorest import Api
-from routes import IvrBlueprint, UsersBlueprint, BpnBlueprint, CalendarBlueprint, ActionsBlueprint, SoundBlueprint
+from routes import IvrBlueprint, UsersBlueprint, BpnBlueprint, CalendarBlueprint, ActionsBlueprint, SoundBlueprint, TokenBlueprint
 from flask_cors import CORS
 import os
 from twilio.rest import Client
@@ -16,9 +16,9 @@ def create_app():
 
     CORS(app)
 
-    account_sid = os.environ['ACCOUNT_SID']
-    auth_token = os.environ['TOKEN_SID']
-    client = Client(account_sid, auth_token)
+    # account_sid = os.environ['ACCOUNT_SID']
+    # auth_token = os.environ['TOKEN_SID']
+    # client = Client(account_sid, auth_token)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Diburim tovim - IVR, REST API"
@@ -42,6 +42,7 @@ def create_app():
     api.register_blueprint(ActionsBlueprint)
     api.register_blueprint(CalendarBlueprint)
     api.register_blueprint(SoundBlueprint)
+    api.register_blueprint(TokenBlueprint)
     
     
 
