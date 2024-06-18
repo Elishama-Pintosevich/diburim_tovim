@@ -11,7 +11,7 @@ blp = Blueprint("token", __name__, description = "token controller")
 
 @blp.route("/token")
 class Token(MethodView):
-    blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}},
+    @blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}},
                         {'name': 'identity','in': 'query','description': 'The identity','required': True,'schema': {'type': 'string'}}])
     @blp.response(200)
     def get(self):
