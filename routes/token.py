@@ -9,16 +9,17 @@ from twilio.jwt.access_token.grants import VoiceGrant
 blp = Blueprint("token", __name__, description = "token controller")
 
 
-@blp.route("/token/<string:pn>")
+@blp.route("/token")
 class Token(MethodView):
-    @blp.doc(parameters=[{'name': 'pn','in': 'path','description': 'The phone number of the user','required': True,'schema': {'type': 'string'}}])
+    blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}},
+                        {'name': 'identity','in': 'query','description': 'The identity','required': True,'schema': {'type': 'string'}}])
     @blp.response(200)
-    def get(self, pn):
-        item = UserModel.query.filter_by(phone_number = pn).first_or_404()
+    def get(self):
+        item = UserModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
         account_sid = item.account
         api_key = item.api_key
         api_secret = item.api_secret
-        identity = pn
+        identity = request.args.get('identity')
 
         token = AccessToken(account_sid, api_key, api_secret, identity=identity)
         voice_grant = VoiceGrant(

@@ -8,7 +8,7 @@ import json
 def redirect_to_asistent(**kwargs):
 
     kwargs.get('resp').play(kwargs.get('start_play'))
-    kwargs.get('resp').dial(caller_id=kwargs.get('number'))
+    kwargs.get('resp').dial(caller_id=kwargs.get('identity'))
     kwargs.get('resp').play(kwargs.get('end_play'))
     kwargs.get('resp').hangup()
     
@@ -42,7 +42,7 @@ def call_by_path_action_type(path, actions, resp, gather, bpn):
     if len(filtered_list) > 0:
         my_sounds = filtered_list[0].sounds[:]
         my_dict = {d.type: f'https://storage.googleapis.com/sound-storage/{d.path}' for d in my_sounds}
-        my_dict['number'] = filtered_list[0].parameters or None
+        my_dict['identity'] = filtered_list[0].parameters or None
         func_list[filtered_list[0].kind](resp = resp, gather = gather, bpn = bpn, **my_dict)
         return True
     else:
