@@ -18,15 +18,15 @@ class Calls(MethodView):
                         {'name': 'identity','in': 'query','description': 'The identity','required': True,'schema': {'type': 'string'}}])
     @blp.response(200)
     def post(self):
-        # load_dotenv()
-        # item = UserModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
-        # account_sid = item.account
-        # api_key = item.api_key
-        # api_secret = item.api_secret
-        # identity = request.args.get('identity')
-        # CALLER_ID = 'client:quick_start'
+        load_dotenv()
+        item = UserModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
+        account_sid = item.account
+        api_key = item.api_key
+        api_secret = item.api_secret
+        identity = request.args.get('identity')
+        CALLER_ID = 'client:quick_start'
 
-        # client = Client(api_key, api_secret, account_sid)
+        client = Client(api_key, api_secret, account_sid)
         # to = request.values.get("to")
         # call = None
 
@@ -39,7 +39,6 @@ class Calls(MethodView):
         # return str(call)
         resp = VoiceResponse()
         to = request.values.get("to")
-        CALLER_ID = 'client:quick_start'
         if to is None or len(to) == 0:
             print('good')
             resp.say("Congratulations! You have just made your first call! Good bye.")
