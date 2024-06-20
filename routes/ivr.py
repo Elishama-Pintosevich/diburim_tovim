@@ -31,14 +31,17 @@ class Ivr(MethodView):
 
         # account_sid = item.user.account
         # auth_token = item.user.token
-        # client = Client(account_sid, auth_token)
+        account_sid = item.user.account
+        api_key = item.user.api_key
+        api_secret = item.user.api_secret
+        client = Client(api_key, api_secret, account_sid)
         # calls = client.calls.list(to=request.args.get('phone_number'),limit=2)
         
         if not 'retry' in request.args:
             send_mail({"subject":"לקוח חדש התעניין במוצר", "message":request.values.get('From'), "email":item.user.email})
             pass
 
-        call_by_path_action_type('start', item.actions[:], resp, gather, request.args.get('phone_number'))
+        call_by_path_action_type('start', item.actions[:], resp, gather, request.args.get('phone_number'), client)
 
         resp.redirect(f'/ivr?retry=yes&phone_number={request.args.get('phone_number')}')
         return str(resp)
@@ -55,9 +58,14 @@ class Ivr2(MethodView):
         
         item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
 
+        account_sid = item.user.account
+        api_key = item.user.api_key
+        api_secret = item.user.api_secret
+        client = Client(api_key, api_secret, account_sid)
+
         if 'Digits' in request.values:
            
-            action = call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'))
+            action = call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'), client)
           
             if not action:
                 resp.say('wrong number')
@@ -66,7 +74,7 @@ class Ivr2(MethodView):
             
         elif 'id' in request.args:
             
-            call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'))
+            call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'), client)
 
 
         resp.redirect(f'/ivr2?id={choice}&phone_number={request.args.get('phone_number')}')
@@ -85,9 +93,13 @@ class Ivr3(MethodView):
         
         item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
 
+        account_sid = item.user.account
+        api_key = item.user.api_key
+        api_secret = item.user.api_secret
+        client = Client(api_key, api_secret, account_sid)
 
         if 'Digits' in request.values:
-            action = call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
+            action = call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client)
             
             if not action:
                 resp.say('wrong number')
@@ -95,7 +107,7 @@ class Ivr3(MethodView):
                 return str(resp) 
             
         elif 'choise_id' in request.args:
-            call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
+            call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client)
 
 
         resp.redirect(f'/ivr3?id={id}&choise_id={choice}&phone_number={request.args.get('phone_number')}')
@@ -112,13 +124,18 @@ class Ivr4(MethodView):
         
         item = BpnModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
 
+        account_sid = item.user.account
+        api_key = item.user.api_key
+        api_secret = item.user.api_secret
+        client = Client(api_key, api_secret, account_sid)
+
         id = int(request.args.get('id'))
         id2 = int(request.args.get('id2'))
         choice = int(request.values['Digits'])
 
         if 'Digits' in request.values:
             
-            action = call_by_path_action_type(f"{id}.{id2}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'))
+            action = call_by_path_action_type(f"{id}.{id2}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client)
            
             if not action:
                 resp.say('wrong number')
