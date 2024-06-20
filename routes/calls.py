@@ -8,7 +8,7 @@ from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.rest import Client
 import os
 from dotenv import load_dotenv
-blp = Blueprint("token", __name__, description = "token controller")
+blp = Blueprint("Calls", __name__, description = "Calls controller")
 
 
 @blp.route("/calls")
