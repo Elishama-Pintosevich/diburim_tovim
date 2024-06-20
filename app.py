@@ -1,6 +1,6 @@
 from flask import Flask , request
 from flask_smorest import Api
-from routes import IvrBlueprint, UsersBlueprint, BpnBlueprint, CalendarBlueprint, ActionsBlueprint, SoundBlueprint, TokenBlueprint
+from routes import IvrBlueprint, UsersBlueprint, BpnBlueprint, CalendarBlueprint, ActionsBlueprint, SoundBlueprint, TokenBlueprint, CallsBlueprint
 from flask_cors import CORS
 import os
 from twilio.rest import Client
@@ -43,6 +43,7 @@ def create_app():
     api.register_blueprint(CalendarBlueprint)
     api.register_blueprint(SoundBlueprint)
     api.register_blueprint(TokenBlueprint)
+    api.register_blueprint(CallsBlueprint)
     
     
 

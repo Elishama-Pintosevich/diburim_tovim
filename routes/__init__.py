@@ -5,3 +5,4 @@ from routes.calendar import blp as CalendarBlueprint
 from routes.ivr import blp as IvrBlueprint
 from routes.sounds import blp as SoundBlueprint
 from routes.token import blp as TokenBlueprint
+from routes.calls import blp as CallsBlueprint
