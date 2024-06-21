@@ -14,39 +14,39 @@ blp = Blueprint("Calls", __name__, description = "Calls controller")
 
 @blp.route("/calls")
 class Calls(MethodView):
-    @blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}},
-                        {'name': 'identity','in': 'query','description': 'The identity','required': True,'schema': {'type': 'string'}}])
+    # @blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}},
+    #                     {'name': 'identity','in': 'query','description': 'The identity','required': True,'schema': {'type': 'string'}}])
     @blp.response(200)
     def post(self):
         load_dotenv()
-        item = UserModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
-        account_sid = item.account
-        api_key = item.api_key
-        api_secret = item.api_secret
-        identity = request.args.get('identity')
-        CALLER_ID = 'client:quick_start'
+        # item = UserModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
+        # account_sid = item.account
+        # api_key = item.api_key
+        # api_secret = item.api_secret
+        # identity = request.args.get('identity')
+        # CALLER_ID = 'client:quick_start'
 
-        client = Client(api_key, api_secret, account_sid)
-        to = request.values.get("to")
-        call = None
+        # client = Client(api_key, api_secret, account_sid)
+        # to = request.values.get("to")
+        # call = None
 
-        if to is None or len(to) == 0:
-            call = client.calls.create(url=request.url_root + 'ivr?phone_number=023764951', to='client:' + identity, from_=CALLER_ID)
-        elif to[0] in "+1234567890" and (len(to) == 1 or to[1:].isdigit()):
-            call = client.calls.create(url=request.url_root + 'ivr?phone_number=023764951', to=to, from_='972534905961')
-        else:
-            call = client.calls.create(url=request.url_root + 'ivr?phone_number=023764951', to='client:' + to, from_=CALLER_ID)
-        return str(call)
-        # resp = VoiceResponse()
+        # if to is None or len(to) == 0:
+        #     call = client.calls.create(url=request.url_root + 'ivr?phone_number=023764951', to='client:' + identity, from_=CALLER_ID)
+        # elif to[0] in "+1234567890" and (len(to) == 1 or to[1:].isdigit()):
+        #     call = client.calls.create(url=request.url_root + 'ivr?phone_number=023764951', to=to, from_='972534905961')
+        # else:
+        #     call = client.calls.create(url=request.url_root + 'ivr?phone_number=023764951', to='client:' + to, from_=CALLER_ID)
+        # return str(call)
+        resp = VoiceResponse()
         # to = request.values.get("to")
         # if to is None or len(to) == 0:
-        #     print('good')
-        #     resp.say("Congratulations! You have just made your first call! Good bye.")
+        print('good')
+        resp.say("Congratulations! You have just made your first call! Good bye.")
         # elif to[0] in "+1234567890" and (len(to) == 1 or to[1:].isdigit()):
         #     resp.dial(callerId='972534905961').number(to)
         # else:
         #     resp.dial(callerId=CALLER_ID).client(to)
-        # return str(resp)
+        return str(resp)
 
         
 
