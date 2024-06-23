@@ -16,7 +16,6 @@ blp = Blueprint("Calls", __name__, description = "Calls controller")
 class Calls(MethodView):
     # @blp.doc(parameters=[{'name': 'phone_number','in': 'query','description': 'The phone number to call','required': True,'schema': {'type': 'string'}},
     #                     {'name': 'identity','in': 'query','description': 'The identity','required': True,'schema': {'type': 'string'}}])
-    @blp.response(200)
     def post(self):
         load_dotenv()
         # item = UserModel.query.filter_by(phone_number = request.args.get('phone_number')).first_or_404()
