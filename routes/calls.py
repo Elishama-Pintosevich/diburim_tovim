@@ -41,7 +41,7 @@ class Calls(MethodView):
         # to = request.values.get("to")
         # if to is None or len(to) == 0:
         print('good')
-        resp.say("Congratulations! You have just made your first call! Good bye.")
+        resp.play("https://storage.googleapis.com/sound-storage/mp3_files/test.mp3")
         # elif to[0] in "+1234567890" and (len(to) == 1 or to[1:].isdigit()):
         #     resp.dial(callerId='972534905961').number(to)
         # else:
