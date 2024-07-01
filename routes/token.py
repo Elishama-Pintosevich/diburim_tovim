@@ -26,11 +26,11 @@ class Token(MethodView):
         identity = request.args.get('identity')
         push_credential_sid= os.environ['PUSH_CREDENTIAL_SID']
         outgoing_application_sid=os.environ['APP_SID']
-        
+
         client = Client(api_key, api_secret, account_sid)
         calls = client.calls.list(to='97223764951',limit=2)
 
-        print(calls)
+        print(list(calls))
         token = AccessToken(account_sid, api_key, api_secret, identity=identity)
         voice_grant = VoiceGrant(
             push_credential_sid=push_credential_sid,
