@@ -40,20 +40,20 @@ def check_nearest_end_week(**kwargs):
     date = datetime(datetime.now().year, datetime.now().month, datetime.now().day + remainUntil5)
     # date = f'{datetime.now().year}-{datetime.now().month}-{datetime.now().day + remainUntil5}'
     
-    # is_reserved = any(d.taken_date == date.strftime("%Y-%m-%d") for d in kwargs.get('dates'))
-    is_reserved = False
-    for d in kwargs.get('dates'):
-        print(d.taken_date)
-        if f'{d.taken_date}' == f'{date.strftime("%Y-%m-%d")}':
-            is_reserved = True
-            print('good')
-            break
+    is_reserved = any(f'{d.taken_date}' == f'{date.strftime("%Y-%m-%d")}' for d in kwargs.get('dates'))
+    # is_reserved = False
+    # for d in kwargs.get('dates'):
+    #     print(d.taken_date)
+    #     if f'{d.taken_date}' == f'{date.strftime("%Y-%m-%d")}':
+    #         is_reserved = True
+    #         print('good')
+    #         break
     
     # print(date)
     # print(list(kwargs.get('dates')))
-    print(date.strftime("%Y-%m-%d"))
-    print(remainUntil5)
-    print(is_reserved)
+    # print(date.strftime("%Y-%m-%d"))
+    # print(remainUntil5)
+    # print(is_reserved)
     kwargs.get('resp').say('its reserve, thank you.') if is_reserved else kwargs.get('resp').say('its not reserve, , thank you.')
 
     kwargs.get('resp').hangup()
