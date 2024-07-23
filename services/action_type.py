@@ -40,9 +40,16 @@ def check_nearest_end_week(**kwargs):
     date = datetime(datetime.now().year, datetime.now().month, datetime.now().day + remainUntil5)
     # date = f'{datetime.now().year}-{datetime.now().month}-{datetime.now().day + remainUntil5}'
     
-    is_reserved = any(d.taken_date == date.strftime("%Y-%m-%d") for d in kwargs.get('dates'))
-    print(date)
-    print(list(kwargs.get('dates')))
+    # is_reserved = any(d.taken_date == date.strftime("%Y-%m-%d") for d in kwargs.get('dates'))
+    is_reserved = False
+    for d in kwargs.get('dates'):
+        print(d.taken_date)
+        if d.taken_date == date.strftime("%Y-%m-%d"):
+            is_reserved = True
+            break
+    
+    # print(date)
+    # print(list(kwargs.get('dates')))
     print(date.strftime("%Y-%m-%d"))
     print(remainUntil5)
     print(is_reserved)
