@@ -37,11 +37,12 @@ def check_nearest_end_week(**kwargs):
     today = (datetime.now().isoweekday() % 7)+1
     remainUntil5 = (5 - today) % 7 
     
-    # date = datetime(datetime.now().year, datetime.now().month, datetime.now().day + remainUntil5)
-    date = f'{datetime.now().year}-{datetime.now().month}-{datetime.now().day + remainUntil5}'
+    date = datetime(datetime.now().year, datetime.now().month, datetime.now().day + remainUntil5)
+    # date = f'{datetime.now().year}-{datetime.now().month}-{datetime.now().day + remainUntil5}'
     
-    is_reserved = any(d.taken_date == date for d in kwargs.get('dates'))
+    is_reserved = any(d.taken_date == date.strftime("%Y-%m-%d") for d in kwargs.get('dates'))
     print(date)
+    print(date.strftime("%Y-%m-%d"))
     print(remainUntil5)
     print(is_reserved)
     kwargs.get('resp').say('its reserve, thank you.') if is_reserved else kwargs.get('resp').say('its not reserve, , thank you.')
