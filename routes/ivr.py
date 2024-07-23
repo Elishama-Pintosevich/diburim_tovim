@@ -41,7 +41,7 @@ class Ivr(MethodView):
             send_mail({"subject":"לקוח חדש התעניין במוצר", "message":request.values.get('From'), "email":item.user.email})
             pass
 
-        call_by_path_action_type('start', item.actions[:], resp, gather, request.args.get('phone_number'), client)
+        call_by_path_action_type('start', item.actions[:], resp, gather, request.args.get('phone_number'), client, item.taken_dates[:] )
 
         resp.redirect(f'/ivr?retry=yes&phone_number={request.args.get('phone_number')}')
         return str(resp)
@@ -65,7 +65,7 @@ class Ivr2(MethodView):
 
         if 'Digits' in request.values:
            
-            action = call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'), client)
+            action = call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'), client,item.taken_dates[:])
           
             if not action:
                 resp.say('wrong number')
@@ -74,7 +74,7 @@ class Ivr2(MethodView):
             
         elif 'id' in request.args:
             
-            call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'), client)
+            call_by_path_action_type(str(choice), item.actions, resp, gather, request.args.get('phone_number'), client, item.taken_dates[:])
 
 
         resp.redirect(f'/ivr2?id={choice}&phone_number={request.args.get('phone_number')}')
@@ -99,7 +99,7 @@ class Ivr3(MethodView):
         client = Client(api_key, api_secret, account_sid)
 
         if 'Digits' in request.values:
-            action = call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client)
+            action = call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client, item.taken_dates[:])
             
             if not action:
                 resp.say('wrong number')
@@ -107,7 +107,7 @@ class Ivr3(MethodView):
                 return str(resp) 
             
         elif 'choise_id' in request.args:
-            call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client)
+            call_by_path_action_type(f"{id}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client, item.taken_dates[:])
 
 
         resp.redirect(f'/ivr3?id={id}&choise_id={choice}&phone_number={request.args.get('phone_number')}')
@@ -135,7 +135,7 @@ class Ivr4(MethodView):
 
         if 'Digits' in request.values:
             
-            action = call_by_path_action_type(f"{id}.{id2}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client)
+            action = call_by_path_action_type(f"{id}.{id2}.{str(choice)}", item.actions, resp, gather, request.args.get('phone_number'), client, item.taken_dates[:])
            
             if not action:
                 resp.say('wrong number')
