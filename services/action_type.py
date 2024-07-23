@@ -46,6 +46,7 @@ def check_nearest_end_week(**kwargs):
         print(d.taken_date)
         if d.taken_date == date.strftime("%Y-%m-%d"):
             is_reserved = True
+            print('good')
             break
     
     # print(date)
