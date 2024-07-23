@@ -42,6 +42,7 @@ def check_nearest_end_week(**kwargs):
     
     is_reserved = any(d.taken_date == date.strftime("%Y-%m-%d") for d in kwargs.get('dates'))
     print(date)
+    print(list(kwargs.get('dates')))
     print(date.strftime("%Y-%m-%d"))
     print(remainUntil5)
     print(is_reserved)
