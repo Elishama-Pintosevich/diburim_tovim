@@ -42,7 +42,9 @@ def check_nearest_end_week(**kwargs):
     
     is_reserved = any(d.taken_date == date for d in kwargs.get('dates'))
 
-    kwargs.get('resp').say('its reserve') if is_reserved else kwargs.get('resp').say('its not reserve')
+    kwargs.get('resp').say('its reserve, thank you.') if is_reserved else kwargs.get('resp').say('its not reserve, , thank you.')
+
+    kwargs.get('resp').hangup()
     
 
 
